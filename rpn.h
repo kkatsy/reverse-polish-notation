@@ -107,15 +107,24 @@ double rpn(string *strs, int strs_length) {
 
     // iterate thru elements in reverse polish notation string
     for(int i = 0; i < strs_length; i++){
+
         // if string is not an operator, add to stack
         if(!is_operator(strs[i])){
+
             // add to stack
             numberStack.push_back(stod(strs[i]));
 
         // if string is an operator, perform operation on vals in stack
         } else if(is_operator(strs[i]))  {
+
             // perform operation on stack
-            perform_operation(strs[i], numberStack);
+            if((strs[i] == "<" || strs[i] == ">") && i > 1){
+                perform_operation(strs[i], numberStack);
+            } else if(i > 2){
+                perform_operation(strs[i], numberStack);
+            } else {
+                throw std::invalid_argument( "Not enough values to perform operation!" );
+            }
 
         } else {
             throw std::invalid_argument( "Invalid rph element!" );
@@ -190,8 +199,8 @@ void ast(string *strs, int strs_length){
     list<Node*> stack;
 
     for(int i = 0; i < strs_length; i++){
-        if (is_operator(strs[i])){
-            // if string is an operator:
+        if (is_operator(strs[i]) && strs[i]!="<" && strs[i]!=">"){
+            // if string is an operator with two operands:
 
             Node *rightElem = stack.back();
             stack.pop_back();
