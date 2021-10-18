@@ -105,7 +105,6 @@ double rpn(string *strs, int strs_length) {
         cout << endl;
     }
 
-
     return result;
 }
 
@@ -138,17 +137,24 @@ struct Node {
 
 void print_ast(Node* root, int level){
     if (root != nullptr) {
-
+        for(int i = 0; i < level; i++){
+            cout<<"\t";
+        }
+        //cout << level << " ";
         if(!root->is_leaf_node()){
             cout<<"(";
         }
 
-        cout<<root->data<<" ";
-        print_ast(root->left, level++);
-        print_ast(root->right, level++);
+        cout<<root->data<<"\n";
+        level++;
+        print_ast(root->left, level);
+        print_ast(root->right, level);
 
         if(!root->is_leaf_node()){
-            cout<<")";
+            for(int i = 0; i < level - 1; i++){
+                cout<<"\t";
+            }
+            cout<<")"<<"\n";
         }
     }
 }
