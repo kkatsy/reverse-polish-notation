@@ -25,52 +25,70 @@ bool is_operator (string &a_string){
     return in_list;
 }
 
+
 /* perform a numeric operation given an operand and stack of operators */
-double perform_operation(string &operand, list<double>& numStack){
-    double operator_top = numStack.back();
-    numStack.pop_back();
+void perform_operation(string &operand, list<double>& numStack){
 
-    double operator_bottom = numStack.back();
-    numStack.pop_back();
-
-//    std::cout << operator_top << " " << operator_bottom << endl;
-
-    double result = 0;
+    double result;
     if (operand == "+"){
         // addition
+        double operator_top = numStack.back();
+        numStack.pop_back();
+        double operator_bottom = numStack.back();
+        numStack.pop_back();
         result = operator_bottom + operator_top;
 
     } else if (operand == "-") {
         // subtraction
+        double operator_top = numStack.back();
+        numStack.pop_back();
+        double operator_bottom = numStack.back();
+        numStack.pop_back();
         result = operator_bottom - operator_top;
 
     } else if (operand == "*"){
         // multiplication
+        double operator_top = numStack.back();
+        numStack.pop_back();
+        double operator_bottom = numStack.back();
+        numStack.pop_back();
         result = operator_bottom * operator_top;
 
     } else if (operand == "/"){
         // division
-        if(operator_top == 0){
+        double operator_top = numStack.back();
+        numStack.pop_back();
+        double operator_bottom = numStack.back();
+        numStack.pop_back();
+
+        if(operator_top == 0.0){
             throw std::invalid_argument( "Division by zero!" );
         }
         result = operator_bottom / operator_top;
 
     } else if (operand == "**") {
         // exponent
-        if(operator_bottom == 0 && operator_top == 0){
+        double operator_top = numStack.back();
+        numStack.pop_back();
+        double operator_bottom = numStack.back();
+        numStack.pop_back();
+
+        if(operator_bottom == 0.0 && operator_top == 0.0){
             throw std::invalid_argument( "Exponentiation of zero!" );
         }
         result = pow(operator_bottom, operator_top);
 
     } else if (operand == "<"){
         // ceiling
-        numStack.push_back(operator_top);
-        result = ceil(operator_bottom);
+        double operator_top = numStack.back();
+        numStack.pop_back();
+        result = ceil(operator_top);
 
     } else if (operand == ">"){
         // floor
-        numStack.push_back(operator_top);
-        result = floor(operator_bottom);
+        double operator_top = numStack.back();
+        numStack.pop_back();
+        result = floor(operator_top);
 
     } else {
         // invalid operand
@@ -78,7 +96,6 @@ double perform_operation(string &operand, list<double>& numStack){
     }
 
     numStack.push_back(result);
-    return 0;
 }
 
 
@@ -93,25 +110,16 @@ double rpn(string *strs, int strs_length) {
         // if string is not an operator, add to stack
         if(!is_operator(strs[i])){
             // add to stack
-//            cout << stod(strs[i]) << ' ';
-//            cout << "not operator" << '\n';
             numberStack.push_back(stod(strs[i]));
 
         // if string is an operator, perform operation on vals in stack
         } else if(is_operator(strs[i]))  {
             // perform operation on stack
-//            cout << strs[i] << " ";
-//            cout << "operator" << '\n';
-            double success = perform_operation(strs[i], numberStack);
+            perform_operation(strs[i], numberStack);
 
         } else {
             throw std::invalid_argument( "Invalid rph element!" );
         }
-
-//        for (auto const &r: numberStack) {
-//            std::cout << r << " ";
-//        }
-//        cout << endl;
     }
 
     return numberStack.front();
